@@ -9,7 +9,7 @@ export const setToken = (token) => {
 };
 
 export const clearToken = () => {
-  connectionsApi.defaults.headers.common.Authorization = ``;
+  delete connectionsApi.defaults.headers.common.Authorization;
 };
 
 export const signUpThunk = createAsyncThunk(
@@ -42,12 +42,20 @@ export const loginThunk = createAsyncThunk(
 
 export const logoutThunk = createAsyncThunk(
   "auth/logout",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
+      const persistedToken = getState().auth.token;
+
+      if (persistedToken) {
+        setToken(persistedToken);
+      }
+
       await connectionsApi.post("/users/logout");
       clearToken();
     } catch (error) {
       return rejectWithValue(error.message);
+    } finally {
+      clearToken();
     }
   }
 );

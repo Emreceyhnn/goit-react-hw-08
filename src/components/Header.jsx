@@ -14,9 +14,8 @@ export default function Header() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectLoggedIn);
 
-  const handleSubmit = (values, actions) => {
-    dispatch(logoutThunk(values));
-    actions.resetForm();
+  const handleLogout = async () => {
+    await dispatch(logoutThunk());
   };
 
   return (
@@ -76,7 +75,7 @@ export default function Header() {
                   href="/"
                   variant="outlined"
                   sx={{ ml: 2 }}
-                  onClick={handleSubmit}
+                  onClick={handleLogout}
                 >
                   Log Out
                 </Button>

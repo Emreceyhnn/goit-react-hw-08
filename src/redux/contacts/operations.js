@@ -3,10 +3,11 @@ import { connectionsApi, setToken } from "../auth/operations";
 
 export const fetchContactsThunk = createAsyncThunk(
   "contacts/fetchContacts",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
+      const token = getState().auth.token;
+      setToken(token);
       const { data } = await connectionsApi.get("/contacts");
-      setToken(data.token);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -16,10 +17,12 @@ export const fetchContactsThunk = createAsyncThunk(
 
 export const deleteContactThunk = createAsyncThunk(
   "contacts/deleteContact",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, getState }) => {
     try {
+      const token = getState().auth.token;
+      setToken(token);
       const { data } = await connectionsApi.delete(`/contacts/${id}`);
-      setToken(data.token);
+
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -37,11 +40,12 @@ export const deleteContactThunk = createAsyncThunk(
 
 export const addContactThunk = createAsyncThunk(
   "contacts/addContact",
-  async (addContact, { rejectWithValue }) => {
+  async (addContact, { rejectWithValue, getState }) => {
     try {
+      const token = getState().auth.token;
+      setToken(token);
       const { data } = await connectionsApi.post(`/contacts`, addContact);
-      console.log(data.token);
-      setToken(data.token);
+
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
