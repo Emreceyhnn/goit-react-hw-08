@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { connectionsApi } from "../auth/operations";
+import { connectionsApi, setToken } from "../auth/operations";
 
 export const fetchContactsThunk = createAsyncThunk(
   "contacts/fetchContacts",
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await connectionsApi.get("/contacts");
+      setToken(data.token);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -18,6 +19,7 @@ export const deleteContactThunk = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const { data } = await connectionsApi.delete(`/contacts/${id}`);
+      setToken(data.token);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -38,6 +40,8 @@ export const addContactThunk = createAsyncThunk(
   async (addContact, { rejectWithValue }) => {
     try {
       const { data } = await connectionsApi.post(`/contacts`, addContact);
+      console.log(data.token);
+      setToken(data.token);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);

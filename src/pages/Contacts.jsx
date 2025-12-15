@@ -1,38 +1,55 @@
-import { Box, Divider, Stack } from "@mui/material";
-import { useState } from "react";
+import { Box, Divider, Stack, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import SearchBar from "../components/Search";
 import ContactForm from "../components/ContactForm";
 import ContactList from "../components/ContactList";
+import {
+  fetchContactsThunk,
+  deleteContactThunk,
+} from "../redux/contacts/operations";
+import {
+  selectFilterData,
+  selectorFilter,
+  selectorLoading,
+} from "../redux/contacts/selectors";
+import { onFilter } from "../redux/filter/slice";
 
 export default function ContactsPage() {
-  const [contacts, setContacts] = useState([]);
-  const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectFilterData);
+  const filter = useSelector(selectorFilter);
+  const isLoading = useSelector(selectorLoading);
 
-  const handleAddContact = (contact) => {
-    setContacts((prev) => [...prev, contact]);
-  };
+  useEffect(() => {
+    dispatch(fetchContactsThunk());
+  }, [dispatch]);
 
   const handleDeleteContact = (id) => {
-    setContacts((prev) => prev.filter((contact) => contact.id !== id));
+    dispatch(deleteContactThunk(id));
   };
 
-  const filteredContacts = contacts.filter(
-    (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.phone.includes(search)
-  );
+  const handleSearchChange = (value) => {
+    dispatch(onFilter(value));
+  };
 
   return (
     <Box sx={{ maxWidth: 500, mx: "auto", mt: 4 }}>
       <Stack spacing={3}>
-        <ContactForm onAdd={handleAddContact} />
+        <ContactForm />
         <Divider />
-        <SearchBar value={search} onChange={setSearch} />
+
+        <SearchBar value={filter} onChange={handleSearchChange} />
         <Divider />
-        <ContactList
-          contacts={filteredContacts}
-          onDelete={handleDeleteContact}
-        />
+
+        {isLoading ? (
+          <Typography align="center" color="text.secondary">
+            Yükleniyor...
+          </Typography>
+        ) : (
+          <ContactList contacts={contacts} onDelete={handleDeleteContact} />
+        )}
       </Stack>
     </Box>
   );

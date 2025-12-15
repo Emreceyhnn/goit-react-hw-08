@@ -30,7 +30,7 @@ export default function ContactList({ contacts, onDelete }) {
         >
           <CardContent sx={{ flexGrow: 1 }}>
             <Typography variant="h6">{contact.name}</Typography>
-            <Typography color="text.secondary">{contact.phone}</Typography>
+            <Typography color="text.secondary">{contact.number}</Typography>
           </CardContent>
 
           <IconButton color="error" onClick={() => onDelete(contact.id)}>

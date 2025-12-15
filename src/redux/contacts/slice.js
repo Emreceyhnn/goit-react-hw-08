@@ -8,7 +8,7 @@ import { logoutThunk } from "../auth/operations";
 
 const initialState = {
   contacts: [],
-  loading: "false",
+  loading: false,
   error: null,
 };
 const pending = (state) => {

@@ -6,8 +6,19 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { selectLoggedIn } from "../redux/auth/selectors";
+import { logoutThunk } from "../redux/auth/operations";
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectLoggedIn);
+
+  const handleSubmit = (values, actions) => {
+    dispatch(logoutThunk(values));
+    actions.resetForm();
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       <AppBar position="sticky" color="default" elevation={1}>
@@ -49,13 +60,28 @@ export default function Header() {
           </Box>
 
           <>
-            <Button variant="contained" href="/register" sx={{ ml: 2 }}>
-              Register
-            </Button>
+            {!isLoggedIn ? (
+              <>
+                <Button variant="contained" href="/register" sx={{ ml: 2 }}>
+                  Register
+                </Button>
 
-            <Button href="/login" variant="outlined" sx={{ ml: 2 }}>
-              Login
-            </Button>
+                <Button href="/login" variant="outlined" sx={{ ml: 2 }}>
+                  Login
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  href="/"
+                  variant="outlined"
+                  sx={{ ml: 2 }}
+                  onClick={handleSubmit}
+                >
+                  Log Out
+                </Button>
+              </>
+            )}
           </>
         </Toolbar>
       </AppBar>
