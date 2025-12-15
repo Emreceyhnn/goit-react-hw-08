@@ -8,11 +8,11 @@ import RegisterPage from "./pages/Register";
 import Header from "./components/Header";
 import Contacts from "./pages/Contacts";
 import { refreshThunk } from "./redux/auth/operations";
-import { selectLoggedIn, selectRefresh } from "./redux/auth/selectors";
+import { selectRefresh } from "./redux/auth/selectors";
+import PrivateRoute from "./routes/PrivateRoute";
 
 export default function App() {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(selectLoggedIn);
   const isRefreshing = useSelector(selectRefresh);
 
   useEffect(() => {
@@ -31,7 +31,14 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/contacts" element={isLoggedIn && <Contacts />} />
+        <Route
+          path="contacts"
+          element={
+            <PrivateRoute>
+              <Contacts />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );
