@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import storage from "redux-persist/lib/storage";
 
 export const connectionsApi = axios.create({
   baseURL: "https://connections-api.goit.global",
@@ -56,6 +57,8 @@ export const logoutThunk = createAsyncThunk(
       return rejectWithValue(error.message);
     } finally {
       clearToken();
+      await storage.removeItem("persist:auth");
+      await storage.removeItem("auth");
     }
   }
 );
