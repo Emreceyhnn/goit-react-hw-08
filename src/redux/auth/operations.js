@@ -1,6 +1,5 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
 
 export const connectionsApi = axios.create({
   baseURL: "https://connections-api.goit.global",
@@ -62,17 +61,16 @@ export const logoutThunk = createAsyncThunk(
 
 export const refreshThunk = createAsyncThunk(
   "auth/refresh",
-  async (_, { rejectWithValue, getState }) => {
-    const persistedToken = getState().auth.token;
-    if (!persistedToken) {
-      return rejectWithValue("Token is not found!");
+  async (_, thunkAPI) => {
+    const token = thunkAPI.getState().auth.token;
+    if (!token) {
+      return thunkAPI.rejectWithValue();
     }
-    try {
-      setToken(persistedToken);
-      const { data } = await connectionsApi.get("/users/current");
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+
+    const { data } = await axios.get("/users/current", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return data;
   }
 );

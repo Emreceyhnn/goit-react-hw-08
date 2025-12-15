@@ -26,7 +26,7 @@ const initialState = {
   error: null,
   loading: false,
   isLoggedIn: false,
-  isRefreshing: false,
+  isRefreshing: true,
 };
 
 const authSlice = createSlice({
@@ -36,19 +36,16 @@ const authSlice = createSlice({
     builder
       .addCase(logoutThunk.fulfilled, () => ({ ...initialState }))
       .addCase(logoutThunk.rejected, () => ({ ...initialState }))
+      .addCase(refreshThunk.pending, (state) => {
+        state.isRefreshing = true;
+      })
       .addCase(refreshThunk.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoggedIn = true;
         state.isRefreshing = false;
       })
-      .addCase(refreshThunk.pending, (state, action) => {
-        state.isRefreshing = true;
-      })
-      .addCase(refreshThunk.rejected, (state, action) => {
+      .addCase(refreshThunk.rejected, (state) => {
         state.isRefreshing = false;
-        state.user = { name: "", email: "" };
-        state.token = "";
-        state.isLoggedIn = false;
       })
       .addMatcher(
         isAnyOf(loginThunk.fulfilled, signUpThunk.fulfilled),
