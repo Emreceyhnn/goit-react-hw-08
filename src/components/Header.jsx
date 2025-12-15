@@ -9,6 +9,7 @@ import { Link } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoggedIn } from "../redux/auth/selectors";
 import { logoutThunk } from "../redux/auth/operations";
+import { persistor } from "../redux/store";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     await dispatch(logoutThunk());
+    await persistor.purge();
   };
 
   return (

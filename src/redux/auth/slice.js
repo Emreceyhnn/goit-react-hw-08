@@ -34,16 +34,8 @@ const authSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(logoutThunk.fulfilled, (state) => {
-        state.user = { name: "", email: "" };
-        state.token = "";
-        state.isLoggedIn = false;
-      })
-      .addCase(logoutThunk.rejected, (state) => {
-        state.user = { name: "", email: "" };
-        state.token = "";
-        state.isLoggedIn = false;
-      })
+      .addCase(logoutThunk.fulfilled, () => ({ ...initialState }))
+      .addCase(logoutThunk.rejected, () => ({ ...initialState }))
       .addCase(refreshThunk.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoggedIn = true;
@@ -54,6 +46,9 @@ const authSlice = createSlice({
       })
       .addCase(refreshThunk.rejected, (state, action) => {
         state.isRefreshing = false;
+        state.user = { name: "", email: "" };
+        state.token = "";
+        state.isLoggedIn = false;
       })
       .addMatcher(
         isAnyOf(loginThunk.fulfilled, signUpThunk.fulfilled),
