@@ -13,7 +13,6 @@ import { selectLoggedIn, selectRefresh } from "./redux/auth/selectors";
 export default function App() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectLoggedIn);
-  console.log(isLoggedIn);
   const isRefreshing = useSelector(selectRefresh);
 
   useEffect(() => {

@@ -50,15 +50,17 @@ export default function Header() {
             </Link>
           </Typography>
 
-          <Box>
-            <Link
-              href="/contacts"
-              underline="none"
-              sx={{ color: "rgb(50,50,50)" }}
-            >
-              Contacts
-            </Link>
-          </Box>
+          {isLoggedIn && (
+            <Box>
+              <Link
+                href="/contacts"
+                underline="none"
+                sx={{ color: "rgb(50,50,50)" }}
+              >
+                Contacts
+              </Link>
+            </Box>
+          )}
 
           <>
             {!isLoggedIn ? (

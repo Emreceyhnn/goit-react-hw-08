@@ -44,6 +44,7 @@ export const loginThunk = createAsyncThunk(
 export const logoutThunk = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue, getState }) => {
+    localStorage.removeItem("persist:auth");
     try {
       const persistedToken = getState().auth.token;
 
@@ -55,10 +56,6 @@ export const logoutThunk = createAsyncThunk(
       clearToken();
     } catch (error) {
       return rejectWithValue(error.message);
-    } finally {
-      clearToken();
-      await storage.removeItem("persist:auth");
-      await storage.removeItem("auth");
     }
   }
 );
