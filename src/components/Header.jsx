@@ -24,17 +24,6 @@ export default function Header() {
     <Box sx={{ width: "100%" }}>
       <AppBar position="sticky" color="default" elevation={1}>
         <Toolbar>
-          {/* Mobile menu */}
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2, display: { xs: "flex", md: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-
           {/* Logo */}
           <Typography
             variant="h6"
